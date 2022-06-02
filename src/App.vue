@@ -7,35 +7,13 @@
         <q-toolbar-title>
           {{ title }}
         </q-toolbar-title>
-        <q-input
-          v-model="text"
-          color="white"
-          outlined
-          dense
-          clearable
-          placeholder="Search"
-        >
-          <template v-slot:prepend>
-            <q-icon name="search" />
-          </template>
-        </q-input>
+        <span>로그인</span>
+        <span>로그아웃</span>
       </q-toolbar>
     </q-header>
 
     <q-drawer v-model="leftDrawerOpen" side="left" bordered>
-      <!-- drawer content -->
-      <q-list separator>
-        <q-item
-            clickable
-            v-for="menu in menus"
-            :key="menu.title"
-            @click="menuClick(menu.pathName)"
-        >
-          <q-item-section>
-            <q-item-label>{{ menu.title }}</q-item-label>
-          </q-item-section>
-        </q-item>
-      </q-list>
+      <Menu />
     </q-drawer>
 
     <q-page-container :class="{ dimmed: leftDrawerOpen }">
@@ -45,36 +23,21 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import Menu from './views/menu.vue'
 export default {
-  setup() {
+  components: { Menu },
+  provide() {
     return {
-      leftDrawerOpen: ref(false),
-      title: '놀이터',
-      menus: [
-        {
-          title: 'Single line item',
-          pathName: 'menu1',
-        },
-        {
-          title: 'Item with caption',
-          pathName: 'menu2',
-        },
-        {
-          title: 'OVERLINE',
-          pathName: 'menu3',
-        },
-      ],
-      text: ref(''),
+      toggleLeftDrawer: this.toggleLeftDrawer,
     }
   },
+  data: () => ({
+    leftDrawerOpen: false,
+    title: import.meta.env.VITE_TITLE,
+  }),
   methods: {
     toggleLeftDrawer() {
       this.leftDrawerOpen = !this.leftDrawerOpen
-    },
-    menuClick(path) {
-      this.toggleLeftDrawer()
-      this.$move(path)
     },
   },
 }

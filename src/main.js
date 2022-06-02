@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import piniaPersist from 'pinia-plugin-persist'
 import { Quasar, Dialog } from 'quasar'
 
 // Import icon libraries
@@ -17,17 +18,17 @@ import App from './App.vue'
 import router from './router'
 import util from './plugins/util'
 // import vfmPlugin from 'vue-final-modal'
-import Vue3MobileDetection from 'vue3-mobile-detection'
 import MixinGlobal from './mixins/global'
 
-const app = createApp(App)
+const pinia = createPinia()
+pinia.use(piniaPersist)
 
-app.use(createPinia())
+const app = createApp(App)
+app.use(pinia)
 app.use(router)
 app.use(Quasar, {
   plugins: { Dialog },
 })
-app.use(Vue3MobileDetection)
 app.use(util, router)
 // app.use(vfmPlugin)
 

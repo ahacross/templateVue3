@@ -10,18 +10,18 @@
   "dependencies": {
     "@quasar/extras": "^1.14.0",
     "@vuepic/vue-datepicker": "^3.2.1",
+    "axios": "^0.27.2",
     "billboard.js": "^3.4.1",
-    "d3": "^7.4.4",
     "install": "^0.13.0",
     "npm": "^8.11.0",
     "pinia": "^2.0.13",
+    "pinia-plugin-persist": "^1.0.0",
     "quasar": "^2.7.1",
     "tui-grid": "^4.21.2",
     "vue": "^3.2.33",
     "vue-final-modal": "^3.4.4",
     "vue-router": "^4.0.14",
-    "vue3-datepicker": "^0.3.4",
-    "vue3-mobile-detection": "^1.0.5"
+    "vue3-datepicker": "^0.3.4"
   },
   "devDependencies": {
     "@quasar/vite-plugin": "^1.0.10",
