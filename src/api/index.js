@@ -21,7 +21,11 @@ instance.interceptors.response.use(
   (res) => {
     // console.info('axios.js response : ', res)
     if (res.status === 200) {
-      return res.data
+      if (res.config.isPromise) {
+        return res
+      } else {
+        return res.data
+      }
     } else {
       return res
     }

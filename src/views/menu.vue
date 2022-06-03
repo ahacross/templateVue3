@@ -7,7 +7,7 @@
   <div v-else class="user-name">로그인 부탁드려요.</div>
   <q-separator />
   <q-separator />
-  <template v-for="(menus, idx) in [userMenu, manageMenu]" :key="idx">
+  <template v-for="(menus, idx) in filteredMenu" :key="idx">
     <q-list class="menu-size">
       <q-item
         clickable
@@ -32,17 +32,18 @@
 import { mapState } from 'pinia'
 import { useMemberStore } from '@/stores/member'
 export default {
+  name: 'MenuNavi',
   inject: ['toggleLeftDrawer'],
   data: () => ({
     userMenu: [
       {
         title: '출석현황',
-        pathName: 'menu1',
+        pathName: '/',
         icon: 'assessment',
       },
       {
         title: '개인정보 수정',
-        pathName: 'menu2',
+        pathName: 'edit',
         icon: 'account_circle',
       },
       {
@@ -52,7 +53,7 @@ export default {
       },
       {
         title: '기타 정보',
-        pathName: 'menu3',
+        pathName: 'about',
         icon: 'content_paste',
       },
     ],
@@ -83,14 +84,31 @@ export default {
         icon: 'attach_money',
       },
     ],
+    filteredMenu: [],
     activeMenu: '',
   }),
   computed: {
     ...mapState(useMemberStore, {
       member: 'getInfo',
+      roleGroup: 'getRoleGroup',
     }),
   },
+  watch: {
+    roleGroup() {
+      this.setMenu()
+    },
+  },
+  mounted() {
+    this.setMenu()
+  },
   methods: {
+    setMenu() {
+      let menu = [this.userMenu]
+      if (['SuperAdmin', 'Admin'].includes(this.roleGroup)) {
+        menu = [this.userMenu, this.manageMenu]
+      }
+      this.filteredMenu = menu
+    },
     menuClick(path) {
       this.toggleLeftDrawer()
       this.$move(path)

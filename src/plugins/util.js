@@ -1,3 +1,5 @@
+import * as date from './date'
+import './addPrototype'
 export default {
   install(app, router) {
     app.config.globalProperties.$move = (url, params = null, type) => {
@@ -6,5 +8,7 @@ export default {
       const urlType = url.includes('/') ? 'path' : 'name'
       moveFn({ [urlType]: url }, params)
     }
+
+    app.config.globalProperties.$date = date
   },
 }

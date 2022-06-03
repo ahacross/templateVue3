@@ -7,10 +7,6 @@ import bb, { gauge } from 'billboard.js'
 export default {
   name: 'GaugeChart',
   props: {
-    columns: {
-      type: Array,
-      default: () => [['12주간 출석률', 25]],
-    },
     title: {
       type: String,
       default: '12주간 출석률',
@@ -53,3 +49,8 @@ export default {
   },
 }
 </script>
+<style scoped>
+.bb :deep(text) {
+  font-size: 16px;
+}
+</style>

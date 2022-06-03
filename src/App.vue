@@ -24,6 +24,9 @@
 
 <script>
 import Menu from './views/menu.vue'
+import { GET_IS_MANAGER } from './api/member'
+import { mapActions } from 'pinia'
+import { useMemberStore } from '@/stores/member'
 export default {
   components: { Menu },
   provide() {
@@ -35,13 +38,21 @@ export default {
     leftDrawerOpen: false,
     title: import.meta.env.VITE_TITLE,
   }),
+  mounted() {
+    this.userAuth()
+  },
   methods: {
+    ...mapActions(useMemberStore, ['setAuth']),
     toggleLeftDrawer() {
       this.leftDrawerOpen = !this.leftDrawerOpen
+    },
+    async userAuth() {
+      const res = await GET_IS_MANAGER()
+      this.setAuth(res.role)
     },
   },
 }
 </script>
-<style scoped>
+<style>
 @import 'assets/base.css';
 </style>

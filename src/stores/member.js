@@ -7,14 +7,24 @@ export const useMemberStore = defineStore('member', {
   }),
   getters: {
     getInfo: (state) => state.info,
-    getAuth: (state) => state.auth,
+    getRoleGroup(state) {
+      const auth = state.auth.split('(').first()
+      let roleGroup
+
+      if (['서버관리자', '임원'].includes(auth)) {
+        roleGroup = 'SuperAdmin'
+      } else if (['파트장'].includes(auth)) {
+        roleGroup = 'Admin'
+      }
+      return roleGroup
+    },
   },
   actions: {
     setInfo(info) {
       this.info = info
     },
     getInfoOne(name) {
-      return this.info[name]
+      return this?.info[name]
     },
     setAuth(auth) {
       this.auth = auth
