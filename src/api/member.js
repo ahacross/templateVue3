@@ -10,6 +10,9 @@ function getMemberId() {
 
 // 회원 정보 가져오기
 export function GET_MEMBER_INFO(id) {
+  if (!id) {
+    id = getMemberId()
+  }
   const url = `${prefix}/member/${id}`
   return instance({ url, method: 'GET' })
 }
@@ -57,9 +60,23 @@ export function GET_DUES_YEAR() {
   return instance({ url, method: 'GET', params: { year } })
 }
 
+// 올해 임원들 가져오기
 export function GET_IS_MANAGER() {
   const memberId = getMemberId()
   const url = `${prefix}/officer/${memberId}`
   const year = makeDate().format('YYYY')
   return instance({ url, method: 'GET', params: { year, member_id: memberId } })
+}
+
+// 로그인
+export function GET_LOGIN(phone) {
+  const url = `${prefix}/member`
+  const type = 'login'
+  return instance({ url, method: 'GET', params: { type, phone } })
+}
+
+// 개인정보 update
+export function PUT_MEMBER_UPDATE(data) {
+  const url = `${prefix}/member/${data.member_id}`
+  return instance({ url, method: 'PUT', data })
 }

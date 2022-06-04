@@ -7,8 +7,8 @@
         <q-toolbar-title>
           {{ title }}
         </q-toolbar-title>
-        <span>로그인</span>
-        <span>로그아웃</span>
+        <span v-if="isLogin" @click="logout">로그아웃</span>
+        <span v-else @click="login">로그인</span>
       </q-toolbar>
     </q-header>
 
@@ -24,8 +24,8 @@
 
 <script>
 import Menu from './views/menu.vue'
-import { GET_IS_MANAGER } from './api/member'
-import { mapActions } from 'pinia'
+import { GET_MEMBER_INFO, GET_IS_MANAGER } from './api/member'
+import { mapActions, mapState } from 'pinia'
 import { useMemberStore } from '@/stores/member'
 export default {
   components: { Menu },
@@ -38,17 +38,46 @@ export default {
     leftDrawerOpen: false,
     title: import.meta.env.VITE_TITLE,
   }),
-  mounted() {
-    this.userAuth()
+  computed: {
+    ...mapState(useMemberStore, ['isLogin']),
+  },
+  watch: {
+    isLogin() {
+      if (!this.isLogin) {
+        if (this.$loadId()) {
+          this.reloadUserData()
+        } else {
+          this.$move('notLogin')
+        }
+      }
+    },
+  },
+  async mounted() {
+    if (!this.isLogin) {
+      await this.reloadUserData()
+    }
+    await this.userAuth()
   },
   methods: {
-    ...mapActions(useMemberStore, ['setAuth']),
+    ...mapActions(useMemberStore, ['setAuth', 'setInfo']),
     toggleLeftDrawer() {
       this.leftDrawerOpen = !this.leftDrawerOpen
     },
     async userAuth() {
       const res = await GET_IS_MANAGER()
       this.setAuth(res.role)
+    },
+    login() {
+      location.reload()
+    },
+    logout() {
+      this.setInfo({}) // store data 지우기
+      this.$removeId() // localStorage memberId 지우기
+    },
+    async reloadUserData() {
+      const mid = this.$loadId()
+      const res = await GET_MEMBER_INFO(mid)
+      this.setInfo(res)
     },
   },
 }
