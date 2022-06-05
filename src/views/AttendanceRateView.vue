@@ -43,6 +43,7 @@ export default {
       rate1y: '',
     },
     dues: [],
+    $$kakao: 1,
   }),
   computed: {
     ...mapState(useMemberStore, ['getInfo']),

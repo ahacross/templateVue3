@@ -3,7 +3,7 @@
 </template>
 <script>
 import { GET_LOGIN } from '@/api/member'
-import { mapActions } from 'pinia/dist/pinia'
+import { mapState, mapActions } from 'pinia/dist/pinia'
 import { useMemberStore } from '@/stores/member'
 
 export default {
@@ -11,10 +11,24 @@ export default {
   data() {
     return {}
   },
+  computed: {
+    ...mapState(useMemberStore, ['isLogin']),
+  },
+  watch: {
+    isLogin() {
+      if (this.isLogin) {
+        this.$move('/')
+      }
+    },
+  },
   async mounted() {
-    const res = await this.inputPhoneNumber()
-    if (res) {
-      await this.login(res)
+    if (!this.$loadId()) {
+      const res = await this.inputPhoneNumber()
+      if (res) {
+        await this.login(res)
+      }
+    } else {
+      this.$move('/')
     }
   },
   methods: {

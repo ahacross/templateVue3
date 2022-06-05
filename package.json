@@ -14,6 +14,7 @@
     "billboard.js": "^3.4.1",
     "dayjs": "^1.11.2",
     "install": "^0.13.0",
+    "lodash": "^4.17.21",
     "npm": "^8.11.0",
     "pinia": "^2.0.13",
     "pinia-plugin-persist": "^1.0.0",
