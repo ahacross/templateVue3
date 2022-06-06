@@ -18,10 +18,16 @@ const router = createRouter({
       component: () => import('../views/UserInfoView.vue'),
     },
     {
-      path: '/about',
-      name: 'about',
+      path: '/history',
+      name: 'history',
       meta: { requiresAuth: true },
-      component: () => import('../views/AboutView.vue'),
+      component: () => import('../views/HistoryView.vue'),
+    },
+    {
+      path: '/etc',
+      name: 'etc',
+      meta: { requiresAuth: true },
+      component: () => import('../views/EtcView.vue'),
     },
     {
       path: '/menu1',

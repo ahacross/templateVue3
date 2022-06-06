@@ -40,13 +40,11 @@
 </template>
 
 <script>
-import Datepicker from 'vue3-datepicker'
 import { mapState, mapActions } from 'pinia'
 import { useMemberStore } from '@/stores/member'
 import { GET_MEMBER_INFO, PUT_MEMBER_UPDATE } from '@/api/member'
 
 export default {
-  components: { Datepicker },
   data: () => ({
     form: {
       name: '',

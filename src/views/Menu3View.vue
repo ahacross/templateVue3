@@ -18,12 +18,7 @@
   </div>
 </template>
 <script>
-import TuiGrid from './components/grid/TuiGrid.vue'
-import Datepicker from 'vue3-datepicker'
-// import ModalPopup from './components/modal/ModalVfm.vue'
-import ModalDialog from './components/modal/ModalDialog.vue'
 export default {
-  components: { TuiGrid, Datepicker, ModalDialog },
   data() {
     return {
       date: new Date(),

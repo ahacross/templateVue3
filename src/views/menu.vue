@@ -48,12 +48,12 @@ export default {
       },
       {
         title: '부른 찬양',
-        pathName: 'menu3',
+        pathName: 'history',
         icon: 'library_books',
       },
       {
         title: '기타 정보',
-        pathName: 'about',
+        pathName: 'etc',
         icon: 'content_paste',
       },
     ],

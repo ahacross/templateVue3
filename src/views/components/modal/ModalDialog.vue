@@ -1,6 +1,6 @@
 <template>
   <q-dialog
-    v-model="showDialog"
+    v-model="dialog.open"
     :full-width="fullWidth"
     :full-height="fullHeight"
   >
@@ -13,17 +13,6 @@
       <q-card-section class="q-pt-none scroll content-scroll">
         <slot></slot>
       </q-card-section>
-
-      <q-card-actions class="bg-white text-teal flex">
-        <template v-for="(label, idx) in buttons" :key="idx">
-          <q-btn
-            flat
-            :label="label"
-            v-close-popup
-            @click="$emit('onClick', label)"
-          />
-        </template>
-      </q-card-actions>
     </q-card>
   </q-dialog>
 </template>
@@ -31,7 +20,16 @@
 <script>
 export default {
   name: 'ModalDialog',
+  provide() {
+    return {
+      modal: this.dialog,
+    }
+  },
   props: {
+    open: {
+      type: Boolean,
+      default: false,
+    },
     title: {
       type: String,
       default: null,
@@ -48,20 +46,36 @@ export default {
       type: Number,
       default: 300,
     },
-    buttons: {
-      type: Array,
-      default: () => ['OK'],
-    },
   },
   data: () => ({
-    showDialog: false,
-  }),
-  methods: {
-    open() {
-      this.showDialog = true
+    dialog: {
+      open: false,
+      reload: false,
     },
+  }),
+  watch: {
+    open() {
+      this.dialog.open = this.open
+    },
+    'dialog.open'() {
+      if (this.dialog.reload) {
+        this.$emit('reload')
+      }
+      const open = this.dialog.open
+      if (!open) {
+        this.$emit('update:open', false)
+      }
+    },
+    'modal.open'() {
+      const open = this.modal.open
+      if (!open) {
+        this.close()
+      }
+    },
+  },
+  methods: {
     close() {
-      this.showDialog = false
+      this.dialog.open = false
     },
   },
 }
