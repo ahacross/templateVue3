@@ -4,7 +4,7 @@
       <tr>
         <th style="width: 20%">부른 날</th>
         <td>
-          <datepicker v-model="form.singed_date" clearable />
+          <date-picker v-model:value="form.singed_date" />
         </td>
       </tr>
       <tr>

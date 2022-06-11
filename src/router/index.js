@@ -30,10 +30,10 @@ const router = createRouter({
       component: () => import('../views/EtcView.vue'),
     },
     {
-      path: '/menu1',
-      name: 'menu1',
+      path: '/worker',
+      name: 'worker',
       meta: { requiresAuth: true },
-      component: () => import('../views/Menu1View.vue'),
+      component: () => import('../views/WorkerView.vue'),
     },
     {
       path: '/menu2',

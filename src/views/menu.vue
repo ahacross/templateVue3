@@ -60,7 +60,7 @@ export default {
     manageMenu: [
       {
         title: '임원 명단',
-        pathName: 'menu3',
+        pathName: 'worker',
         icon: 'thumb_up',
       },
       {

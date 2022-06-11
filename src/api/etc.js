@@ -25,3 +25,27 @@ export function PUT_HISTORY(data) {
   const url = `${prefix}/history/${getMemberId()}`
   return instance({ url, method: 'PUT', data })
 }
+
+// 임원들
+export function GET_WORKERS() {
+  const url = `${prefix}/officer`
+  return instance({ url, method: 'GET' })
+}
+
+// 임원 추가
+export function POST_WORKERS(data) {
+  const url = `${prefix}/officer`
+  return instance({ url, method: 'POST', data })
+}
+
+// 임원 수정
+export function PUT_WORKERS(data) {
+  const url = `${prefix}/officer/${data.member_id}`
+  return instance({ url, method: 'PUT', data })
+}
+
+// 임원 수정
+export function DELETE_WORKERS(data) {
+  const url = `${prefix}/officer/${data.member_id}`
+  return instance({ url, method: 'DELETE', data })
+}

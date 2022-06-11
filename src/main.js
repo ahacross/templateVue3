@@ -20,8 +20,8 @@ import util from './plugins/util'
 // import vfmPlugin from 'vue-final-modal'
 import MixinGlobal from './mixins/global'
 import TuiGrid from '@/views/components/grid/TuiGrid.vue'
-import Datepicker from 'vue3-datepicker'
 import ModalDialog from '@/views/components/modal/ModalDialog.vue'
+import DatePicker from '@/views/components/datepicker/DatePicker.vue'
 
 const pinia = createPinia()
 pinia.use(piniaPersist)
@@ -37,7 +37,7 @@ app.use(util, router)
 
 app.mixin(MixinGlobal)
 app.component('TuiGrid', TuiGrid)
-app.component('Datepicker', Datepicker)
 app.component('ModalDialog', ModalDialog)
+app.component('DatePicker', DatePicker)
 
 app.mount('#app')

@@ -1,0 +1,10 @@
+export const partMap = new Map()
+partMap.set('s', '소프라노')
+partMap.set('a', '알토')
+partMap.set('t', '테너')
+partMap.set('b', '베이스')
+
+export const statusMap = new Map()
+statusMap.set('Y', '활동중')
+statusMap.set('R', '장기결석')
+statusMap.set('N', '기타(탈퇴)')

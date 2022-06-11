@@ -32,10 +32,9 @@
 </template>
 <script>
 import { GET_HISTORY } from '@/api/etc'
-import { mapActions } from 'pinia'
+import { mapActions, mapState } from 'pinia'
 import { useMemberStore } from '@/stores/member'
 import PopupHistory from './popup/HistoryPopup.vue'
-import { mapState } from 'pinia/dist/pinia'
 
 export default {
   name: 'HistoryView',
@@ -95,9 +94,10 @@ export default {
 
     if (['SuperAdmin', 'Admin'].includes(this.roleGroup)) {
       this.$refs.grid.grid.on('click', (e) => {
-        if (e.columnName === 'title') {
+        const { columnName, targetType, instance, rowKey } = e
+        if (columnName === 'title' && targetType === 'cell') {
           const { singed_date, title, link, source, scanning, practice, etc } =
-            e.instance.getRow(e.rowKey)
+            instance.getRow(rowKey)
           this.historyInfo = {
             singed_date,
             title,

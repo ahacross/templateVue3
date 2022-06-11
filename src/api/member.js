@@ -80,3 +80,10 @@ export function PUT_MEMBER_UPDATE(data) {
   const url = `${prefix}/member/${data.member_id}`
   return instance({ url, method: 'PUT', data })
 }
+
+// 이름으로 찾기
+export function GET_MEMBER_NAME(name) {
+  const url = `${prefix}/member`
+  const status = 'Y'
+  return instance({ url, method: 'GET', params: { name, status } })
+}
