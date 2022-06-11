@@ -44,6 +44,7 @@ export default {
         autoClose: true,
         dateFormat: this.dateFormat,
         onSelect: ({ formattedDate }) => {
+          this.date = formattedDate
           this.$emit('update:value', formattedDate)
         },
       }

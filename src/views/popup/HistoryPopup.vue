@@ -97,9 +97,7 @@ export default {
   data() {
     return {
       form: {
-        singed_date: this.singed_date
-          ? this.$date.makeDate(this.singed_date).toDate()
-          : new Date(),
+        singed_date: this.$date.makeDate(this.singed_date).format('YYYY-MM-DD'),
         title: this.title,
         link: this.link,
         source: this.source,

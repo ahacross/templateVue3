@@ -133,8 +133,6 @@ export default {
       },
     }
   },
-
-  mounted() {},
   methods: {
     async searchMember() {
       const name = this.name
