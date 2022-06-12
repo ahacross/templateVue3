@@ -34,6 +34,11 @@ export default {
       date: '',
     }
   },
+  watch: {
+    value() {
+      this.picker.selectDate(this.value)
+    },
+  },
   mounted() {
     this.init()
   },
@@ -43,6 +48,10 @@ export default {
         locale: localeEn,
         autoClose: true,
         dateFormat: this.dateFormat,
+        navTitles: {
+          days: '<i>yyyy</i> <i>MMMM</i>',
+          months: '<i>yyyy</i>',
+        },
         onSelect: ({ formattedDate }) => {
           this.date = formattedDate
           this.$emit('update:value', formattedDate)

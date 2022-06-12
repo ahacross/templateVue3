@@ -40,3 +40,9 @@ a { color: #333; text-decoration: none; }
 a:hover { text-decoration:none }
 a:visited { text-decoration:none }
 a:link { text-decoration:none }
+
+
+.attendState {color: #f5fff6;}
+.attendState.green{ background: #339966;}
+.attendState.orange{ background: #F27812;}
+.attendState.red{ background: #DC0A0A;}

@@ -65,22 +65,22 @@ export default {
       },
       {
         title: '성가대원 관리',
-        pathName: 'menu3',
+        pathName: 'members',
         icon: 'manage_accounts',
       },
       {
         title: '출석 관리',
-        pathName: 'menu3',
+        pathName: 'attendance',
         icon: 'how_to_reg',
       },
       {
-        title: '생일자 관리(월별) ',
-        pathName: 'menu3',
+        title: '생일자(월별)',
+        pathName: 'birthday',
         icon: 'cake',
       },
       {
         title: '회비 관리',
-        pathName: 'menu3',
+        pathName: 'dues',
         icon: 'attach_money',
       },
     ],

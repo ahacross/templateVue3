@@ -20,6 +20,14 @@ export default {
       type: Number,
       default: 300,
     },
+    summary: {
+      type: Object,
+      default: null,
+    },
+    onClick: {
+      type: Function,
+      default: null,
+    },
   },
   mounted() {
     this.applyTheme()
@@ -28,8 +36,8 @@ export default {
   watch: {
     data() {
       const grid = this.grid
-      grid.setBodyHeight(this.bodyHeight)
-      grid.resetData(this.data)
+      grid.destroy()
+      this.makeTable()
     },
   },
   methods: {
@@ -41,14 +49,22 @@ export default {
       })
     },
     makeTable() {
-      this.grid = new Grid({
+      const options = {
         el: this.$refs.grid,
         scrollY: true,
         bodyHeight: this.bodyHeight,
         columns: this.columns,
         data: this.data,
-        options: this.options,
-      })
+      }
+      if (this.summary) {
+        options.summary = this.summary
+      }
+
+      this.grid = new Grid(options)
+
+      if (this.onClick) {
+        this.grid.on('click', this.onClick)
+      }
     },
   },
 }

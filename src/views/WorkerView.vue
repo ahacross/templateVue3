@@ -25,10 +25,10 @@
   </div>
   <div ref="table">
     <tui-grid
-      ref="grid"
       :columns="columns"
       :data="filteredWorkers"
       :body-height="bodyHeight"
+      :on-click="gridClick"
     />
   </div>
   <modal-dialog
@@ -120,8 +120,13 @@ export default {
   mounted() {
     this.bodyHeight = innerHeight - this.$refs.table.offsetTop - 42
     this.getWorkers()
-
-    this.$refs.grid.grid.on('click', (e) => {
+  },
+  methods: {
+    async getWorkers() {
+      const res = await GET_WORKERS()
+      this.workers = res
+    },
+    gridClick(e) {
       const { columnName, targetType, instance, rowKey } = e
       if (columnName === 'name' && targetType === 'cell') {
         const { name, year, s_date, e_date, role, member_id, etc } =
@@ -137,12 +142,6 @@ export default {
         }
         this.openModalUpdate()
       }
-    })
-  },
-  methods: {
-    async getWorkers() {
-      const res = await GET_WORKERS()
-      this.workers = res
     },
     openModalInsert() {
       this.modalTitle = '추가'

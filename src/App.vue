@@ -5,7 +5,7 @@
         <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
 
         <q-toolbar-title>
-          {{ title }}
+          {{ titleAppend || title }}
         </q-toolbar-title>
         <span v-if="isLogin" @click="logout">로그아웃</span>
         <span v-else @click="login">로그인</span>
@@ -37,6 +37,7 @@ export default {
   data: () => ({
     leftDrawerOpen: false,
     title: import.meta.env.VITE_TITLE,
+    titleAppend: '',
   }),
   computed: {
     ...mapState(useMemberStore, ['isLogin']),
@@ -49,6 +50,14 @@ export default {
         } else {
           this.$move('notLogin')
         }
+      }
+    },
+    $route() {
+      const title = this.$route.meta.title
+      if (title) {
+        this.titleAppend = `${this.title} - ${title}`
+      } else {
+        this.titleAppend = ''
       }
     },
   },

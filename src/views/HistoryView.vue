@@ -93,23 +93,7 @@ export default {
     this.getHistoryInfo()
 
     if (['SuperAdmin', 'Admin'].includes(this.roleGroup)) {
-      this.$refs.grid.grid.on('click', (e) => {
-        const { columnName, targetType, instance, rowKey } = e
-        if (columnName === 'title' && targetType === 'cell') {
-          const { singed_date, title, link, source, scanning, practice, etc } =
-            instance.getRow(rowKey)
-          this.historyInfo = {
-            singed_date,
-            title,
-            link,
-            source,
-            scanning,
-            practice,
-            etc,
-          }
-          this.openModalUpdate()
-        }
-      })
+      this.$refs.grid.grid.on('click', this.gridClick)
     }
     console.log(this.roleGroup)
   },
@@ -118,6 +102,23 @@ export default {
     async getHistoryInfo() {
       const res = await GET_HISTORY()
       this.historyData = res
+    },
+    gridClick(e) {
+      const { columnName, targetType, instance, rowKey } = e
+      if (columnName === 'title' && targetType === 'cell') {
+        const { singed_date, title, link, source, scanning, practice, etc } =
+          instance.getRow(rowKey)
+        this.historyInfo = {
+          singed_date,
+          title,
+          link,
+          source,
+          scanning,
+          practice,
+          etc,
+        }
+        this.openModalUpdate()
+      }
     },
     practiceFormatter({ value }) {
       if (value) {

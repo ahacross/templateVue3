@@ -87,3 +87,15 @@ export function GET_MEMBER_NAME(name) {
   const status = 'Y'
   return instance({ url, method: 'GET', params: { name, status } })
 }
+
+// 파트로 찾기
+export function GET_MEMBER_PART(part) {
+  const url = `${prefix}/member`
+  return instance({ url, method: 'GET', params: { part } })
+}
+
+// 대원 추가
+export function POST_MEMBER_INSERT(data) {
+  const url = `${prefix}/member`
+  return instance({ url, method: 'POST', data })
+}

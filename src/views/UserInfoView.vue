@@ -1,5 +1,4 @@
 <template>
-  <h1 class="center">사용자 정보 수정</h1>
   <div class="row justify-center">
     <table>
       <tr>
@@ -23,7 +22,7 @@
       <tr>
         <th>생일</th>
         <td>
-          <datepicker v-model="form.birthday" clearable />
+          <date-picker v-model:value="form.birthday" />
         </td>
       </tr>
     </table>
@@ -66,7 +65,7 @@ export default {
       this.form.name = name
       this.form.phone = phone
       this.form.email = email
-      this.form.birthday = this.$date.makeDate(birthday).toDate()
+      this.form.birthday = this.$date.makeDate(birthday).format('YYYY-MM-DD')
     },
     async onSubmit() {
       const { member_id } = this.getInfo
