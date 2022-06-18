@@ -27,6 +27,10 @@ export default {
     value: {
       type: [String, Array],
     },
+    onRenderCell: {
+      type: Function,
+      default: null,
+    },
   },
   data() {
     return {
@@ -70,6 +74,10 @@ export default {
         } else {
           options.selectedDates = [this.value]
         }
+      }
+
+      if (this.onRenderCell) {
+        options.onRenderCell = this.onRenderCell
       }
 
       this.picker = new AirDatepicker(this.$refs.picker, options)

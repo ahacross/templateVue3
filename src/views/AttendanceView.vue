@@ -1,5 +1,15 @@
 <template>
-  <div class="fit row justify-between" style="padding: 10px">
+  <div class="fit row justify-start" style="padding: 10px">
+    <div class="attendance-label">출석 일자</div>
+    <div class="attendance-date">
+      <date-picker
+        v-model:value="attendance_date"
+        date-format="yyyy-MM-dd"
+        :on-render-cell="onRenderCell"
+      />
+    </div>
+  </div>
+  <div class="fit row justify-between">
     <q-tabs
       v-model="activeTab"
       inline-label
@@ -17,75 +27,78 @@
       />
     </q-tabs>
   </div>
-  <div ref="table">
-    <tui-grid
-      :columns="columns"
-      :data="filteredMembers"
-      :body-height="bodyHeight"
-      :summary="makeSummary()"
-      :on-click="gridClick"
-    />
-  </div>
-  <modal-dialog
-    v-model:open="modalShow"
-    :title="`성가대원 ${modalTitle}`"
-    full-width
-    @reload="getMembers"
-  >
-    <PopupMember v-bind="memberInfo" />
-  </modal-dialog>
+  <table class="mt10" style="width: 100%">
+    <tr>
+      <th>이름</th>
+      <th>생일</th>
+      <th>예배 전</th>
+      <th>예배 후</th>
+    </tr>
+    <tr v-for="(item, idx) in members" :key="idx">
+      <td>{{ item.name }}</td>
+      <td>
+        {{ formatter(item.birthday) }}
+      </td>
+      <td>
+        <q-toggle
+          :false-value="'N'"
+          :true-value="'Y'"
+          color="green"
+          v-model="item.before_check"
+          @update:model-value="
+            (value) => saveAttendance(value, item, 'before_check')
+          "
+        />
+      </td>
+      <td>
+        <q-toggle
+          :false-value="'N'"
+          :true-value="'Y'"
+          color="green"
+          v-model="item.after_check"
+          @update:model-value="
+            (value) => saveAttendance(value, item, 'after_check')
+          "
+        />
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <th>
+        {{ members.filter(({ before_check: c }) => c === 'Y').length + '명' }}
+      </th>
+      <th>
+        {{ members.filter(({ after_check: c }) => c === 'Y').length + '명' }}
+      </th>
+    </tr>
+  </table>
+
+  <div></div>
 </template>
 <script>
-import { GET_MEMBER_PART } from '@/api/member'
+import { GET_ATTENDANCE_PART, PUT_ATTENDANCE, GET_ENROLL } from '@/api/etc'
 import { statusMap, tabs } from '@/plugins/constant'
-import PopupMember from './popup/MemberPopup.vue'
 
 export default {
-  name: 'MembersView',
-  components: { PopupMember },
+  name: 'AttendanceView',
   data() {
-    const reverseStatus = {}
-    Array.from(statusMap.entries()).forEach(([key, value]) => {
-      reverseStatus[value] = key
-    })
+    const customTabs = tabs.slice(1)
     return {
+      attendance_date: '',
       activeTab: 's',
-      tabs,
-      columns: [
-        {
-          header: '이름',
-          name: 'name',
-          align: 'center',
-        },
-        {
-          header: '상태',
-          name: 'status',
-          align: 'center',
-          formatter({ value }) {
-            return statusMap.get(value)
-          },
-        },
-        {
-          header: '마지막 출석일',
-          name: 'last_attend',
-          align: 'center',
-          formatter: this.formatter,
-        },
-      ],
+      tabs: customTabs,
+      statusMap,
       members: [],
-      bodyHeight: 0,
-      state: ['활동중'],
-      reverseStatus,
-      statusOptions: Array.from(statusMap.values()),
-      modalShow: false,
-      modalTitle: '',
-      memberInfo: null,
+      enroll: {
+        before: 0,
+        after: 0,
+      },
     }
   },
   computed: {
     filteredMembers() {
-      const statuses = this.state.map((key) => this.reverseStatus[key])
-      return this.members.filter(({ status }) => statuses.includes(status))
+      return this.members
     },
   },
   watch: {
@@ -94,82 +107,85 @@ export default {
     },
   },
   mounted() {
-    this.bodyHeight = innerHeight - this.$refs.table.offsetTop - 42 - 25
+    this.attendance_date = this.$date
+      .minus(new Date().getDay(), 'd')
+      .format('YYYY-MM-DD')
     this.getMembers()
   },
   methods: {
     async getMembers() {
-      const res = await GET_MEMBER_PART(this.activeTab)
-      this.members = res
+      const res = await GET_ATTENDANCE_PART({
+        part: this.activeTab,
+        attendance_date: this.attendance_date.split('-').join(''),
+      })
+
+      this.members = res.map((row) => {
+        row.before_check = row.before_check ? row.before_check : 'N'
+        row.after_check = row.after_check ? row.after_check : 'N'
+        return row
+      })
+      await this.getEnroll()
     },
-    gridClick(e) {
-      const { columnName, targetType, instance, rowKey } = e
-      if (columnName === 'name' && targetType === 'cell') {
-        const {
-          birthday,
-          name,
-          email,
-          part,
-          phone,
-          regi_date,
-          status,
-          member_id,
-          comment,
-        } = instance.getRow(rowKey)
-        this.memberInfo = {
-          birthday,
-          name,
-          email,
-          part,
-          phone,
-          regi_date,
-          status,
-          member_id,
-          comment,
+    formatter(value) {
+      return value ? this.$date.makeDate(value).format('YYYY-MM-DD') : ''
+    },
+    onRenderCell({ date, cellType }) {
+      if (cellType === 'day') {
+        if (date.getDay()) {
+          return {
+            disabled: true,
+          }
         }
-        this.openModalUpdate()
       }
     },
-    formatter({ value }) {
-      let result = ''
-      if (value) {
-        const lastDate = this.$date.makeDate(value).toDate()
-        const weekCnt = lastDate.getWeekState()
-        const colorClass =
-          weekCnt < 4 ? 'green' : weekCnt < 12 ? 'orange' : 'red'
-        result = `<div class="attendState ${colorClass}">${lastDate.format(
-          'yyyy년 MM월 dd일'
-        )}</div>`
-      }
-      return result
+
+    async saveAttendance(value, { member_id }, field) {
+      const res = await PUT_ATTENDANCE({
+        attendance_date: this.attendance_date.split('-').join(''),
+        part: this.activeTab,
+        [field]: value,
+        member_id,
+      })
+      console.error(res)
     },
-    makeSummary() {
-      return {
-        height: 25,
-        columnContent: {
-          name: {
-            template(valueMap) {
-              return `재적수: ${valueMap.cnt}`
-            },
-          },
-        },
-      }
-    },
-    openModalInsert() {
-      this.modalTitle = '추가'
-      this.memberInfo = null
-      this.modalShow = true
-    },
-    openModalUpdate() {
-      this.modalTitle = '수정'
-      this.modalShow = true
+    async getEnroll() {
+      const res = await GET_ENROLL({
+        attend_date: this.attendance_date.split('-').join(''),
+        part: this.activeTab,
+      })
+
+      res && console.error(res)
+      const length = this.members.length
+      this.enroll.before = res ? res.before_count : length
+      this.enroll.after = res ? res.after_count : length
     },
   },
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .q-tab {
   padding: 0 3px;
   flex: initial;
+}
+
+.attendance-label {
+  height: 30px;
+  display: flex;
+  align-items: center;
+}
+
+.attendance-date {
+  input {
+    height: 30px;
+    border: 1px solid #bbb;
+    margin-left: 10px;
+  }
+}
+
+td {
+  text-align: center;
+}
+th {
+  background-color: #e8f2fe;
 }
 </style>

@@ -49,3 +49,32 @@ export function DELETE_WORKERS(data) {
   const url = `${prefix}/officer/${data.member_id}`
   return instance({ url, method: 'DELETE', data })
 }
+
+// 일자별 출석 체크 가져오기
+export function GET_ATTENDANCE_PART(params) {
+  const url = `${prefix}/attendance`
+  params.status = 'Y'
+  return instance({ url, method: 'GET', params })
+}
+
+// 출석 체크
+export function PUT_ATTENDANCE({ member_id, ...data }) {
+  const url = `${prefix}/attendance/${member_id}`
+  return instance({ url, method: 'PUT', data })
+}
+
+// 재적 가져오기
+export function GET_ENROLL(params) {
+  const url = `${prefix}/enroll`
+  return instance({ url, method: 'GET', params })
+}
+
+// 재적 수동저장
+
+// 생일 가져오기
+// birthday=07
+export function GET_BIRTHDAY(params) {
+  const url = `${prefix}/member`
+  params.type = 'birthday'
+  return instance({ url, method: 'GET', params })
+}

@@ -28,7 +28,7 @@
     label="상태"
   />
 
-  <div ref="table">
+  <div ref="table" style="padding-top: 10px">
     <tui-grid
       :columns="columns"
       :data="filteredMembers"
@@ -105,7 +105,7 @@ export default {
     },
   },
   mounted() {
-    this.bodyHeight = innerHeight - this.$refs.table.offsetTop - 42 - 25
+    this.bodyHeight = innerHeight - this.$refs.table.offsetTop - 42 - 25 - 10
     this.getMembers()
   },
   methods: {

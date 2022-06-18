@@ -12,7 +12,7 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer v-model="leftDrawerOpen" side="left" bordered>
+    <q-drawer v-model="leftDrawerOpen" side="left" overlay bordered>
       <Menu />
     </q-drawer>
 
@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import Menu from './views/menu.vue'
+import Menu from './menu.vue'
 import { GET_MEMBER_INFO, GET_IS_MANAGER } from './api/member'
 import { mapActions, mapState } from 'pinia'
 import { useMemberStore } from '@/stores/member'
