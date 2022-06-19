@@ -51,7 +51,7 @@ export default {
       const info = res.first()
       this.setInfo(info)
       this.$saveId(info.member_id)
-      location.href = '/'
+      location.href = '/myTest'
     },
   },
 }
