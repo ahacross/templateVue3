@@ -9,7 +9,8 @@ import '@quasar/extras/material-icons/material-icons.css'
 import '@quasar/extras/fontawesome-v5/fontawesome-v5.css'
 
 // Import Quasar css
-import 'quasar/src/css/index.sass'
+// import 'quasar/src/css/index.sass'
+import 'quasar/dist/quasar.prod.css'
 import 'billboard.js/dist/billboard.css'
 import 'billboard.js/dist/theme/insight.css'
 import 'tui-grid/dist/tui-grid.css'
